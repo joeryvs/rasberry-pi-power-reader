@@ -1,5 +1,5 @@
 public class App {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         System.out.println("Hello, World ! again");
         System.out.println(Factorial((0)));
         System.out.println(Factorial((1)));
@@ -8,7 +8,10 @@ public class App {
         System.out.println(Factorial((4)));
         CoffeeFactory cf = new CoffeeFactory();
         Coffee coffee = cf.CreateCoffee();
+        coffee.flavour = "new flavour";
+        int q = coffee.flavour.charAt(5);
         System.out.println(coffee.flavour);
+        System.out.println(q);
     }
 
     private static int Factorial(int n){
