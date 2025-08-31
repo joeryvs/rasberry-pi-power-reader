@@ -6,6 +6,9 @@ public class App {
         System.out.println(Factorial((2)));
         System.out.println(Factorial((3)));
         System.out.println(Factorial((4)));
+        CoffeeFactory cf = new CoffeeFactory();
+        Coffee coffee = cf.CreateCoffee();
+        System.out.println(coffee.flavour);
     }
 
     private static int Factorial(int n){
