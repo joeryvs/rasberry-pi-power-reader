@@ -1,4 +1,3 @@
-import java.io.Console;
 
 public class PongGameCLI extends CliGame {
 
@@ -75,7 +74,6 @@ public class PongGameCLI extends CliGame {
 
         screen[y][x] = 'O';
 
-        Console cons = System.console();
         // step 4, result
         System.out.print("\033[H\033[2J");
         for (int i = 0; i < terminalHeight; i++) {

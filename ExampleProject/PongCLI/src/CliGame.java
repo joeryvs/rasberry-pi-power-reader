@@ -26,10 +26,10 @@ public abstract class CliGame {
             // draw
             this.Draw(seconds);
             // wait until next update should happen
+            var timeToSleep = Duration.between(endGoal, clock.instant());
+            Thread.sleep(timeToSleep.toMillis());
             while (clock.instant().isBefore(endGoal)) { 
                 // before.wait(1,100);
-                // TODO not busy work
-
             }
             // clock.wait();
             before1 = before2;
