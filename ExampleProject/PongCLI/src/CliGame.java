@@ -20,7 +20,7 @@ public abstract class CliGame {
             // time passed = 
             // int longPassed = clock.instant().minus();
             Duration x = Duration.between(before1, before2);
-            float seconds = x.toNanos() / 1_000_000;
+            float seconds = ((float)x.toNanos() / 1_000_000) / 500;
             // update
             this.Update(seconds);
             // draw

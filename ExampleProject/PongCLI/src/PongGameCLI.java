@@ -1,3 +1,4 @@
+import java.io.Console;
 
 public class PongGameCLI extends CliGame {
 
@@ -18,6 +19,26 @@ public class PongGameCLI extends CliGame {
         Velocity velocity = pongBall.getVelocity(); 
         float newPosx = oldPosition.X + duration * velocity.X; 
         float newPosy = oldPosition.Y + duration * velocity.Y; 
+
+        if (newPosx >= widthVirtual){
+            newPosx = 2* widthVirtual - newPosx;
+            velocity.X *= -1;
+        }
+        if (newPosy >= heightVirtual){
+            newPosy = 2* heightVirtual - newPosy;
+            velocity.Y *= -1;
+        }
+        if (newPosx <= 0 ){
+            newPosx = -newPosx;
+            velocity.X *= -1;
+        }
+        if (newPosy <= 0){
+            newPosy = -newPosy;
+            velocity.Y *= -1;
+        }
+
+        Position newPostion = new Position(newPosx, newPosy);
+        pongBall.setPostion(newPostion);
         // step 2 check if it remains in bounds
         // step 3 adjucst if needed.
     }
@@ -25,24 +46,25 @@ public class PongGameCLI extends CliGame {
     @Override
     protected void Draw(float duration) {
         // step 1 get width and height
-        int terminalWidth = 14;
+        int terminalWidth = 60;
         int terminalHeight = 15;
 
-        char[][] screen = new char[terminalWidth][terminalHeight];
+        char[][] screen = new char[terminalHeight][terminalWidth];
         for (int i = 0; i < terminalWidth; i++) {
             for (int j = 0; j < terminalHeight; j++) {
-                screen[i][j] = ' ';
+                screen[j][i] = ' ';
             }
         }
         // place borders
         // step 2 draw jail-cell virtually
         for (int i = 0; i < terminalHeight;i++){
-            screen[0][i] = '|';
-            screen[terminalWidth-1][i] = '|';
+            screen[i][0] = '|';
+            screen[i][terminalWidth-1] = '|';
         }
         for (int i = 0; i < terminalWidth; i++) {
-            screen[i][0] = '-';
-            screen[terminalHeight-1][0] = '-';
+            // first and last row
+            screen[0][i] = '-';
+            screen[terminalHeight-1][i] = '-';
         }
 
         
@@ -50,15 +72,16 @@ public class PongGameCLI extends CliGame {
         var pos = pongBall.getPostion();
         int x = (int)((pos.X / widthVirtual) * (terminalWidth -2)) + 1;
         int y = (int)((pos.Y / heightVirtual) * (terminalHeight -2)) + 1;
-        
-        screen[x][y] = 'O';
 
+        screen[y][x] = 'O';
+
+        Console cons = System.console();
         // step 4, result
+        System.out.print("\033[H\033[2J");
         for (int i = 0; i < terminalHeight; i++) {
-            for (int j = 0; j < terminalWidth; j++) {
-                System.out.print(screen[j][i]);
-            }
+            System.out.print(screen[i]);
             System.out.println();
         }
+        System.out.flush();
     }
 }
