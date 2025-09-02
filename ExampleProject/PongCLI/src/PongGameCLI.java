@@ -1,43 +1,32 @@
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class PongGameCLI extends CliGame {
 
-    PongBall pongBall;
+    List<PongBall> pongBalls;
     float widthVirtual = 300;
     float heightVirtual = 200;
     
     public PongGameCLI(){
-        pongBall = new PongBall();
+        pongBalls = new ArrayList<>();
+        var pongBall = new PongBall();
         pongBall.setPostion((new Position(150f, 100f)));
         pongBall.setVelocity(new Velocity(30f, -12f));
+        pongBalls.add(pongBall);
+        var pongBall2 = new PongBall();
+        pongBall2.setPostion((new Position(230f, 78f)));
+        pongBall2.setVelocity(new Velocity(-50f, 9f));
+        pongBalls.add(pongBall2);
     }
 
     @Override
     protected void Update(float duration) {
         // step 1, update the pongball position.
-        Position oldPosition = pongBall.getPostion(); 
-        Velocity velocity = pongBall.getVelocity(); 
-        float newPosx = oldPosition.X + duration * velocity.X; 
-        float newPosy = oldPosition.Y + duration * velocity.Y; 
-
-        if (newPosx >= widthVirtual){
-            newPosx = 2* widthVirtual - newPosx;
-            velocity.X *= -1;
+        for (PongBall pongBall: pongBalls){
+            pongBall.UpdatePosition(duration, widthVirtual, heightVirtual);
         }
-        if (newPosy >= heightVirtual){
-            newPosy = 2* heightVirtual - newPosy;
-            velocity.Y *= -1;
-        }
-        if (newPosx <= 0 ){
-            newPosx = -newPosx;
-            velocity.X *= -1;
-        }
-        if (newPosy <= 0){
-            newPosy = -newPosy;
-            velocity.Y *= -1;
-        }
-
-        Position newPostion = new Position(newPosx, newPosy);
-        pongBall.setPostion(newPostion);
         // step 2 check if it remains in bounds
         // step 3 adjucst if needed.
     }
@@ -68,11 +57,14 @@ public class PongGameCLI extends CliGame {
 
         
         // step 3 place ball
-        var pos = pongBall.getPostion();
-        int x = (int)((pos.X / widthVirtual) * (terminalWidth -2)) + 1;
-        int y = (int)((pos.Y / heightVirtual) * (terminalHeight -2)) + 1;
-
-        screen[y][x] = 'O';
+        for (PongBall pongBall : pongBalls) {
+            
+            var pos = pongBall.getPostion();
+            int x = (int)((pos.X / widthVirtual) * (terminalWidth -2)) + 1;
+            int y = (int)((pos.Y / heightVirtual) * (terminalHeight -2)) + 1;
+            
+            screen[y][x] = 'O';
+        }
 
         // step 4, result
         System.out.print("\033[H\033[2J");

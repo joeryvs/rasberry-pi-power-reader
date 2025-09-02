@@ -27,7 +27,9 @@ public abstract class CliGame {
             this.Draw(seconds);
             // wait until next update should happen
             var timeToSleep = Duration.between(endGoal, clock.instant());
-            Thread.sleep(timeToSleep.toMillis());
+            if (timeToSleep.toMillis() > 0){
+                Thread.sleep(timeToSleep.toMillis());
+            }
             while (clock.instant().isBefore(endGoal)) { 
                 // before.wait(1,100);
             }
