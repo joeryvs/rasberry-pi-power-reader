@@ -4,33 +4,39 @@ import java.time.Instant;
 public abstract class CliGame {
 
     protected boolean running = false;
-    protected float frameRate = 20;
+    protected float frameRate = 3;
     public CliGame(){}
 
     public void Run() throws InterruptedException{
         if (running) return;
         Clock clock = Clock.systemDefaultZone();
-        Instant before = clock.instant();
+        Instant before1 = clock.instant();
+        Instant before2 = clock.instant();
         this.running = true;
         while (running){
             // get time 
-            Instant endGoal = before.plusMillis((long)(1000 / this.frameRate));
-
+            Instant endGoal = before1.plusMillis((long)(1000 / this.frameRate));
+            before2 = clock.instant();
             // time passed = 
             // int longPassed = clock.instant().minus();
-            Duration x = Duration.between(before, clock.instant());
+            Duration x = Duration.between(before1, before2);
+            float seconds = x.toNanos() / 1_000_000;
             // update
-            this.Update(x);
+            this.Update(seconds);
             // draw
-            this.Draw(x);
+            this.Draw(seconds);
             // wait until next update should happen
-            while (before.isBefore(endGoal)) { 
-                before.wait(1,100);
+            while (clock.instant().isBefore(endGoal)) { 
+                // before.wait(1,100);
+                // TODO not busy work
+
             }
-            before = clock.instant();
+            // clock.wait();
+            before1 = before2;
+            // before2 = clock.instant();
 
         }
     }
-    protected abstract void Update(Duration duration);
-    protected abstract void Draw(Duration duration);
+    protected abstract void Update(float duration);
+    protected abstract void Draw(float duration);
 }
